@@ -28,50 +28,7 @@ fn get_value_from_line(line: &str) -> u32 {
     first_digit * 10 + last_digit
 }
 
-// get_digit_from_word returns the digit representation of word so that we can
-// replace that in the line.
-// Example: 'one' -> '1'
-fn get_digit_from_word(word: &str) -> &str {
-    match word {
-        "one" => "1",
-        "two" => "2",
-        "three" => "3",
-        "four" => "4",
-        "five" => "5",
-        "six" => "6",
-        "seven" => "7",
-        "eight" => "8",
-        "nine" => "9",
-        _ => "",
-    }
-}
-
 pub fn correct_digits_in_line(line: &str) -> String {
-    // let mut new_line = String::new();
-    // let len = line.len();
-
-    // 'outer: for i in 0..len {
-    //     for j in i..len {
-    //         let w = &line[i..j + 1];
-
-    //         if w.len() == 1 {
-    //             let c = w.chars().next().unwrap();
-    //             if c.is_digit(10) {
-    //                 new_line.push(c);
-    //                 continue 'outer;
-    //             }
-    //         }
-
-    //         let digit_word = get_digit_from_word(w);
-
-    //         if !digit_word.is_empty() {
-    //             new_line.push_str(digit_word);
-    //             break;
-    //         }
-    //     }
-    // }
-
-    // new_line
     let mut new_line = String::new();
     let len = line.len();
     for i in 0..len {
