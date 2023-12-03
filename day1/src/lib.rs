@@ -5,7 +5,6 @@ pub fn process_input(lines: &Vec<u8>) -> u32 {
         .lines()
         .map(|line| line.unwrap())
         .filter(|line| !line.is_empty())
-        .map(|line| correct_digits_in_line(&line))
         .map(|line| get_value_from_line(&line))
         .sum()
 }
@@ -13,15 +12,25 @@ pub fn process_input(lines: &Vec<u8>) -> u32 {
 // This returns the first digit, last digit found in the line as the result.
 // Example: '1abc2' -> 12
 fn get_value_from_line(line: &str) -> u32 {
+    let line = correct_digits_in_line(&line);
+
     let mut first_digit: u32 = 0;
     let mut last_digit: u32 = 0;
 
-    for c in line.chars() {
+    if line.len() == 1 {
+        let c = line.chars().next().unwrap();
         if c.is_digit(10) {
-            if first_digit == 0 {
-                first_digit = c.to_digit(10).unwrap() as u32;
-            }
-            last_digit = c.to_digit(10).unwrap() as u32;
+            first_digit = c.to_digit(10).unwrap();
+            last_digit = first_digit;
+        }
+    } else {
+        let c = line.chars().next().unwrap();
+        if c.is_digit(10) {
+            first_digit = c.to_digit(10).unwrap();
+        }
+        let c = &line[line.len() - 1..].chars().next().unwrap();
+        if c.is_digit(10) {
+            last_digit = c.to_digit(10).unwrap();
         }
     }
 
