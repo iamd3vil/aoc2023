@@ -1,8 +1,10 @@
-use std::io::BufRead;
+use std::{
+    fs::File,
+    io::{BufRead, BufReader},
+};
 
-pub fn process_input(lines: &Vec<u8>) -> u32 {
-    lines
-        .lines()
+pub fn process_input(f: &mut BufReader<File>) -> u32 {
+    f.lines()
         .map(|line| line.unwrap())
         .filter(|line| !line.is_empty())
         .map(|line| get_value_from_line(&line))
