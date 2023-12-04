@@ -5,6 +5,8 @@ use std::{
     io::{BufRead, BufReader},
 };
 
+use itertools::Itertools;
+
 #[derive(Debug)]
 enum Val {
     Symbol(char),
@@ -56,40 +58,60 @@ pub fn process_input(lines: &mut BufReader<File>) -> u32 {
         }
     }
 
+    // We have to check if there is any `*` symbol and if there are 2 part_numbers adjacent to it.
+    // If there are 2, we have to multiple both numbers and then sum all numbers.
+    let mut gear_positions: BTreeMap<(i32, i32), Vec<&str>> = BTreeMap::new();
+
     // We have to check if each number has an adjacent symbol either beside it or diagnolly.
-    numbers
-        .iter()
-        .filter_map(|(coords, num)| {
-            let positions_to_check: Vec<(i32, i32)> = vec![
-                (1, 0),
-                (1, -1),
-                (0, -1),
-                (-1, -1),
-                (-1, 0),
-                (-1, 1),
-                (0, 1),
-                (1, 1),
-            ];
+    numbers.iter().for_each(|(coords, num)| {
+        let positions_to_check: Vec<(i32, i32)> = vec![
+            (1, 0),
+            (1, -1),
+            (0, -1),
+            (-1, -1),
+            (-1, 0),
+            (-1, 1),
+            (0, 1),
+            (1, 1),
+        ];
 
-            let mut valid = false;
+        // let mut valid = false;
 
-            for (x, y) in coords {
-                for (x_pos, y_pos) in positions_to_check.iter() {
-                    let x_pos = *x_pos + *x as i32;
-                    let y_pos = *y_pos + *y as i32;
+        for (x, y) in coords {
+            for (x_pos, y_pos) in positions_to_check.iter() {
+                let x_pos = *x_pos + *x as i32;
+                let y_pos = *y_pos + *y as i32;
 
-                    if let Some(Val::Symbol(_)) = positions.get(&(x_pos as usize, y_pos as usize)) {
-                        valid = true;
-                        break;
+                if let Some(Val::Symbol(c)) = positions.get(&(x_pos as usize, y_pos as usize)) {
+                    // valid = true;
+
+                    if *c == '*' {
+                        gear_positions.entry((x_pos, y_pos)).or_default().push(num);
                     }
                 }
             }
+        }
 
-            if valid {
-                Some(num.parse::<u32>().unwrap())
-            } else {
-                None
-            }
+        // if valid {
+        //     Some(num.parse::<u32>().unwrap())
+        // } else {
+        //     None
+        // }
+    });
+
+    gear_positions
+        .into_iter()
+        // .inspect(|(coords, nums)| println!("{:?} {:?}", coords, nums))
+        .map(|(coords, nums)| {
+            let uniq_nums = nums.iter().unique().copied().collect::<Vec<&str>>();
+            (coords, uniq_nums)
+        })
+        .filter(|(_coords, nums)| nums.len() == 2)
+        .map(|(_coords, nums)| {
+            let mul: u32 = nums
+                .iter()
+                .fold(1, |acc, num| acc * num.parse::<u32>().unwrap());
+            mul
         })
         .sum()
 }
