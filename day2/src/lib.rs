@@ -1,4 +1,7 @@
-use std::io::BufRead;
+use std::{
+    fs::File,
+    io::{BufRead, BufReader},
+};
 
 #[derive(Debug, PartialEq, PartialOrd)]
 pub enum Colors {
@@ -7,7 +10,7 @@ pub enum Colors {
     Blue(u32),
 }
 
-pub fn process_input(lines: &Vec<u8>) -> u32 {
+pub fn process_input(lines: &mut BufReader<File>) -> u32 {
     lines
         .lines()
         .map(|line| line.unwrap())
