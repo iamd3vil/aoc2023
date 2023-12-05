@@ -13,7 +13,7 @@ enum Val {
     Number(char),
 }
 
-pub fn process_input(lines: &mut BufReader<File>) -> u32 {
+pub fn process_input(lines: &Vec<u8>) -> u32 {
     let mut positions: BTreeMap<(usize, usize), Val> = BTreeMap::new();
 
     lines

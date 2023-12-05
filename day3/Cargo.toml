@@ -8,3 +8,10 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.75"
 itertools = "0.12.0"
+
+[dev-dependencies]
+criterion = "0.5.1"
+
+[[bench]]
+name = "day3_benchmark"
+harness = false
