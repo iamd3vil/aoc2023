@@ -1,12 +1,10 @@
 use anyhow::Result;
 use day2::process_input;
-use std::{fs::File, io::BufReader};
+use std::fs;
 
 fn main() -> Result<()> {
-    let f = File::open("test.txt")?;
-    let mut rdr = BufReader::new(f);
-    // let f = fs::read("test.txt")?;
-    let val = process_input(&mut rdr);
+    let f = fs::read("test.txt")?;
+    let val = process_input(&f);
 
     println!("val: {val}");
     Ok(())

@@ -1,7 +1,4 @@
-use std::{
-    fs::File,
-    io::{BufRead, BufReader},
-};
+use std::io::BufRead;
 
 #[derive(Debug, PartialEq, PartialOrd)]
 pub enum Colors {
@@ -10,7 +7,7 @@ pub enum Colors {
     Blue(u32),
 }
 
-pub fn process_input(lines: &mut BufReader<File>) -> u32 {
+pub fn process_input(lines: &Vec<u8>) -> u32 {
     lines
         .lines()
         .map(|line| line.unwrap())
@@ -53,21 +50,24 @@ fn parse_game_combinations(game_combination: &str) -> (Colors, Colors, Colors) {
 
     for color in colors {
         let color = color.trim();
-        if color.ends_with("red") {
+        if color.ends_with("d") {
+            // red
             red = color
                 .split(' ')
                 .next()
                 .expect("red should have 2 elements")
                 .parse::<u32>()
                 .expect("red should be a number");
-        } else if color.ends_with("green") {
+        } else if color.ends_with("n") {
+            // green
             green = color
                 .split(' ')
                 .next()
                 .expect("green should have 2 elements")
                 .parse::<u32>()
                 .expect("green should be a number");
-        } else if color.ends_with("blue") {
+        } else if color.ends_with("e") {
+            // blue
             blue = color
                 .split(' ')
                 .next()
