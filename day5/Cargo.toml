@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.75"
 itertools = "0.12.0"
+rayon = "1.8.0"
 winnow = { version = "0.5.25", features = ["simd"] }
 
 [dev-dependencies]

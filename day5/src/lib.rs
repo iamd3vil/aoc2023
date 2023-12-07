@@ -1,6 +1,7 @@
 use anyhow::Result;
 use itertools::FoldWhile::{Continue, Done};
 use itertools::Itertools;
+// use rayon::prelude::*;
 use std::io::BufRead;
 use std::io::Lines;
 use std::ops;
@@ -42,9 +43,17 @@ pub fn process_input(input: &[u8]) -> Result<u64> {
     let temp_to_hum_map = parse_map(&mut iter, 1);
     let hum_to_loc_map = parse_map(&mut iter, 1);
 
+    // We need to get seed ranges from seeds. To get range of seeds from `[x, y, ...]`,
+    // x is the starting value and y is the length of the range.
+    // We can get the range by `x..x+y`.
     let min_loc = seeds
-        .iter()
-        .copied()
+        .chunks(2)
+        .map(|r| {
+            let start = r[0];
+            let end = start + r[1];
+            start..end
+        })
+        .flatten()
         .map(|s| {
             let soil = get_value_from_map(&seed_to_soil_map, s);
             let fert = get_value_from_map(&soil_to_fert_map, soil);
@@ -143,7 +152,7 @@ humidity-to-location map:
         "
         .as_bytes();
 
-        assert_eq!(process_input(&input.to_owned())?, 35);
+        assert_eq!(process_input(&input.to_owned())?, 46);
 
         Ok(())
     }
